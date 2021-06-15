@@ -8,6 +8,8 @@ services:
       - "8000:80"
     env_file:
       - .env
+    volumes:
+      - data:/data
     environment:
       APP_ENV: dev
       APP_DEBUG: 1
@@ -21,10 +23,16 @@ services:
       PHP_CONF_OPCACHE_VALIDATE_TIMESTAMP: 1
 
   mysql:
-    image: mysql:8.0.22
+    image: mysql/mysql-server:8.0.22
     command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - datadir:/var/lib/mysql
     environment:
       MYSQL_DATABASE: ${ARTIFAKT_MYSQL_DATABASE_NAME:-changeme}
       MYSQL_USER: ${ARTIFAKT_MYSQL_USER:-changeme}
       MYSQL_PASSWORD: ${ARTIFAKT_MYSQL_PASSWORD:-s3cr3t!}
       MYSQL_RANDOM_ROOT_PASSWORD: "true"
+
+volumes: 
+  data:
+  datadir:

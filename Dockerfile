@@ -2,9 +2,8 @@ FROM registry.artifakt.io/symfony:4.4-apache
 
 COPY --chown=www-data:www-data . /var/www/html/
 
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 # copy the artifakt folder on root
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN  if [ -d .artifakt ]; then cp -rp /var/www/html/.artifakt /.artifakt/; fi
 
 ENV APP_DEBUG=0
@@ -23,11 +22,11 @@ RUN rm -rf /var/www/html/var/uploads && \
 
 # run custom scripts build.sh
 # hadolint ignore=SC1091
-#RUN --mount=source=artifakt-custom-build-args,target=/tmp/build-args \
-RUN    if [ -f /tmp/build-args ]; then source /tmp/build-args; fi && \
+RUN --mount=source=artifakt-custom-build-args,target=/tmp/build-args \
+    if [ -f /tmp/build-args ]; then source /tmp/build-args; fi && \
     if [ -f /.artifakt/build.sh ]; then /.artifakt/build.sh; fi
 
 USER www-data
 RUN php bin/console cache:clear --no-warmup
-RUN php bin/console --verbose cache:warmup
+RUN php bin/console cache:warmup
 USER root

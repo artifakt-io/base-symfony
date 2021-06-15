@@ -1,3 +1,9 @@
+.dockerignore
+Dockerfile
+docker-compose.yaml
+.git
+.gitignore
+
 **/*.log
 **/*.md
 **/*.php~
