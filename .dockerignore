@@ -1,3 +1,9 @@
+.dockerignore
+Dockerfile
+docker-compose.yaml
+.git
+.gitignore
+
 **/*.log
 **/*.md
 **/*.php~
@@ -72,3 +78,22 @@
 
 # Embedded web-server pid file
 /.web-server-pid
+
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> symfony/phpunit-bridge ###
+.phpunit
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+!README.md
