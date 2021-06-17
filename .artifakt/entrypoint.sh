@@ -11,6 +11,6 @@ echo "------------------------------------------------------------"
 
 mkdir -p /data/var/log /data/var/uploads /data/var/cache && \
   ln -sfn /data/var /var/www/html/var  && \
-  chown -R www-data:www-data /var/www/html/ /data/var
+  chown www-data:www-data /var/www/html/ /data/var
 
 echo ">>>>>>>>>>>>>> END CUSTOM ENTRYPOINT SCRIPT <<<<<<<<<<<<<<<<< "
