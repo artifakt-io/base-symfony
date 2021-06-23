@@ -27,12 +27,6 @@ services:
       MYSQL_PASSWORD: ${ARTIFAKT_MYSQL_PASSWORD:-s3cr3t!}
       MYSQL_RANDOM_ROOT_PASSWORD: "true"
 
-  mailhog:
-    image: mailhog/mailhog
-    ports:
-      - "82:8025"
-      - "1025:1025"
-
 volumes: 
   data:
   datadir:

@@ -1,6 +1,5 @@
 FROM registry.artifakt.io/symfony:4.4-apache
 
-ARG wwwFolder=/var/www/html
 ENV APP_DEBUG=0
 ENV APP_ENV=prod
 
