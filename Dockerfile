@@ -4,12 +4,11 @@ ENV APP_DEBUG=0
 ENV APP_ENV=prod
 
 # Copy sources
-COPY --chown=www-data:www-data . $wwwFolder/
+COPY --chown=www-data:www-data . /var/www/html/
 
 # Copy the artifakt folder on root
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN echo $wwwFolder
-RUN  if [ -d .artifakt ]; then cp -rp $wwwFolder/.artifakt /.artifakt/; fi
+RUN  if [ -d .artifakt ]; then cp -rp .artifakt /.artifakt/; fi
 
 # Copy the default vhost configuration for apache
 COPY .artifakt/000-default.conf /etc/apache2/sites-enabled/000-default.conf 
