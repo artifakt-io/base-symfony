@@ -1,38 +1,37 @@
 FROM registry.artifakt.io/symfony:4.4-apache
 
-COPY --chown=www-data:www-data . /var/www/html/
-
-COPY /.artifakt/000-default.conf /etc/apache2/sites-enabled/000-default.conf 
-
-# copy the artifakt folder on root
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN  if [ -d .artifakt ]; then cp -rp /var/www/html/.artifakt /.artifakt/; fi
-
+ARG wwwFolder=/var/www/html
 ENV APP_DEBUG=0
 ENV APP_ENV=prod
 
+# Copy sources
+COPY --chown=www-data:www-data . $wwwFolder/
+
+# Copy the artifakt folder on root
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN echo $wwwFolder
+RUN  if [ -d .artifakt ]; then cp -rp $wwwFolder/.artifakt /.artifakt/; fi
+
+# Copy the default vhost configuration for apache
+COPY .artifakt/000-default.conf /etc/apache2/sites-enabled/000-default.conf 
+
+# Create the parameter.yml file if it doesn't exist
+RUN if [[ ! -f "config/parameters.yml" ]]; then cp .artifakt/parameters.yml config/; fi
+
+# Get the last version of composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# FAILSAFE LOG FOLDER
-RUN mkdir -p /var/log/artifakt && chown www-data:www-data /var/log/artifakt
+# Rm folders
+RUN rm -rf var/uploads
 
-RUN chown -R www-data:www-data /var/www/html
+# MKDIR COMMANDS: FAILSAFE LOG FOLDER, UPLOADS, CACHE, SYMFONY VAR LOG
+RUN mkdir -p /var/log/artifakt /data/uploads var/cache var/log /var/www/.composer
 
-# PERSISTENT DATA FOLDERS
-RUN rm -rf /var/www/html/var/uploads && \
-    mkdir -p /data/uploads && \
-    ln -s /data/uploads /var/www/html/var/uploads && \
-    chown -R www-data:www-data /data/uploads
-
-RUN rm -rf /var/www/html/var/cache && \
-    mkdir -p /data/cache && \
-    ln -s /data/cache /var/www/html/var/cache && \
-    chown -R www-data:www-data /data/cache
-
-RUN mkdir -p /var/www/html/var/log && chown -R www-data:www-data /var/www/html/var/log
+# CHOWN COMMANDS
+RUN chown -R www-data:www-data /var/log/artifakt /var/www/html /var/www/.composer /data/uploads
 
 # run custom scripts build.sh
 # hadolint ignore=SC1091
@@ -40,7 +39,6 @@ RUN mkdir -p /var/www/html/var/log && chown -R www-data:www-data /var/www/html/v
 #    if [ -f /tmp/build-args ]; then source /tmp/build-args; fi && \
 #    if [ -f /.artifakt/build.sh ]; then /.artifakt/build.sh; fi
 
-COPY /.artifakt/parameters.yml config/
 USER www-data
 RUN [ -f composer.lock ] && composer install --no-ansi || true
 RUN php bin/console cache:clear --no-warmup
