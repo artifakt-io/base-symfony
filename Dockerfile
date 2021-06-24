@@ -24,9 +24,9 @@ RUN rm -rf /var/www/html/var/uploads && \
 
 # run custom scripts build.sh
 # hadolint ignore=SC1091
-#RUN --mount=source=artifakt-custom-build-args,target=/tmp/build-args \
-#    if [ -f /tmp/build-args ]; then source /tmp/build-args; fi && \
-#    if [ -f /.artifakt/build.sh ]; then /.artifakt/build.sh; fi
+RUN --mount=source=artifakt-custom-build-args,target=/tmp/build-args \
+    if [ -f /tmp/build-args ]; then source /tmp/build-args; fi && \
+    if [ -f /.artifakt/build.sh ]; then /.artifakt/build.sh; fi
 
 USER www-data
 RUN [ -f composer.lock ] && composer install --no-cache --optimize-autoloader --no-interaction --no-ansi --no-dev || true
