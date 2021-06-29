@@ -34,10 +34,7 @@ USER www-data
 RUN php bin/console cache:clear --no-warmup
 RUN php bin/console cache:warmup
 USER root
-<<<<<<< HEAD
-=======
 
 # fix perms/owner
 RUN chown -R www-data:www-data /data /var/www/html/
 
->>>>>>> 4.4
