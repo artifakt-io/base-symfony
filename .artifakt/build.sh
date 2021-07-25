@@ -4,11 +4,6 @@ set -e
 
 echo ">>>>>>>>>>>>>> START CUSTOM BUILD SCRIPT <<<<<<<<<<<<<<<<< "
 
-echo "------------------------------------------------------------"
-echo "The following build args are available:"
-env
-echo "------------------------------------------------------------"
-
 export APP_ENV=prod
 export APP_DEBUG=0
 
