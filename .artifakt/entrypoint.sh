@@ -12,11 +12,6 @@ fi
 
 source /data/secret-key
 
-echo "------------------------------------------------------------"
-echo "The following build args are available:"
-env
-echo "------------------------------------------------------------"
-
 mkdir -p /data/var/log /data/var/uploads /data/var/cache && \
   ln -sfn /data/var /var/www/html/var  && \
   chown www-data:www-data /data/var/log /data/var/uploads /data/var/cache
