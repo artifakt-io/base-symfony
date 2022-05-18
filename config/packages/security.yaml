@@ -2,14 +2,20 @@ security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         users_in_memory: { memory: null }
+
+    enable_authenticator_manager: true
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: true
-            lazy: true
-            provider: users_in_memory
+            # allow authentication using a form or HTTP basic
+            form_login: ~
+            http_basic: ~
+
+            # configure the form authentication as the entry point for unauthenticated users
+            entry_point: form_login
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication

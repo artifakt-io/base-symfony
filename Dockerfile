@@ -1,4 +1,4 @@
-FROM registry.artifakt.io/symfony:5.3-apache
+FROM registry.artifakt.io/symfony:5.4-apache
 
 ENV APP_DEBUG=0
 ENV APP_ENV=prod
