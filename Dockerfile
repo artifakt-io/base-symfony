@@ -1,9 +1,23 @@
-FROM registry.artifakt.io/symfony:5.4-apache
+FROM php:8.1-apache
+
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+  libzip-dev \
+  wget \
+  zip \
+  zlib1g-dev
+
+RUN docker-php-ext-configure zip && docker-php-ext-install zip
 
 ENV APP_DEBUG=0
 ENV APP_ENV=prod
 
+ARG ARTIFAKT_COMPOSER_VERSION=2.3.7
 ARG CODE_ROOT=.
+
+RUN curl -sS https://getcomposer.org/installer | \
+    php -- --version=${ARTIFAKT_COMPOSER_VERSION} --install-dir=/usr/local/bin --filename=composer
+
 
 COPY --chown=www-data:www-data $CODE_ROOT /var/www/html/
 
